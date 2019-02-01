@@ -1,0 +1,32 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "fpm",
+      "image": "awnali/laravel-blog-fpm",
+      "hostname": "fpm",
+      "essential": false,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 9000,
+          "containerPort": 9000
+        }
+      ]
+    },
+    {
+      "name": "nginx",
+      "image": "awnali/laravel-blog-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "memory": 128,
+      "links": ["fpm"],
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ]
+    }
+  ]
+}

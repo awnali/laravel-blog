@@ -1,0 +1,22 @@
+sudo: require
+services:
+  - docker
+script:
+  - docker build . -t awnali/laravel-blog-fpm
+  - docker build ./nginx -t awnali/laravel-blog-nginx
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push awnali/laravel-blog-fpm
+  - docker push awnali/laravel-blog-nginx
+deploy:
+  provider: elasticbeanstalk
+  region: us-west-1
+  app: "docker-laravel-example"
+  env: "DockerLaravelExample-env"
+  bucket_name: "elasticbeanstalk-us-west-1-131625054305"
+  bucket_path: "docker-laravel-example"
+  on:
+    branch: master
+  access_key_id: "$AWS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET"
